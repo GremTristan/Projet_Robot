@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Value</title>
+    <link href="./style.css" rel="stylesheet" />
+</head>
+<body>
+
+    <div class="point" >
+        
+    </div>
+</body>
+<script>
+        // Connexion WebSocket
+var socket = new WebSocket("ws://localhost:8080/ws");
+
+socket.onopen = function(event) {
+    console.log("WebSocket connected");
+};
+
+socket.onmessage = function(event) {
+    // Parsez les coordonnées x et y à partir du message reçu
+    var data = JSON.parse(event.data);
+    var x = data.x;
+    var y = data.y;
+
+    // Sélectionnez l'élément représentant le point
+    var pointElement = document.getElementById("point");
+
+    // Mettez à jour les styles CSS de l'élément pour déplacer le point
+    pointElement.style.left = x + "px" ;
+    pointElement.style.top = y + "px";
+    
+    var vecteurElement = document.getElementById("data");
+    vecteurElement.innerHTML = "[ x :" + x  + ", y : " + y +"]";
+};
+
+socket.onclose = function(event) {
+    console.log("WebSocket closed");
+};
+
+socket.onerror = function(event) {
+    console.error("WebSocket error: " + event.data);
+};
+
+
+    </script>
+</body>
+</html>

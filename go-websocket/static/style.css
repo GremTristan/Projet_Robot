@@ -1,0 +1,41 @@
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    padding: 20px;
+}
+
+
+.value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Structure de base */
+.container {
+    display: flex;
+    background-color: #333; /* Couleur de fond sombre */
+  }
+  
+  .panel {
+    border: 1000px solid #fff; /* Bordures blanches */
+  }
+  
+  /* Panneau de gauche (plus grand) */
+  .large {
+    flex: 10; /* Taille plus grande */
+  }
+  
+  /* Conteneur des deux panneaux de droite (plus petits) */
+  .panel-container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Panneaux de droite (plus petits) */
+  .small {
+    flex: 1; /* Taille plus petite */
+  }
