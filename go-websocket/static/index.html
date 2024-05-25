@@ -5,47 +5,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Display Value</title>
     <link href="./style.css" rel="stylesheet" />
+    <style>
+        .point {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            border-radius: 50%;
+        }
+        #data {
+            position: absolute;
+            top: 30px;
+            left: 10px;
+        }
+    </style>
 </head>
 <body>
+    <div id="point" class="point"></div>
+    <div id="data">[ x: 0, y: 0 ]</div>
 
-    <div class="point" >
-        
-    </div>
-</body>
-<script>
+    <script>
         // Connexion WebSocket
-var socket = new WebSocket("ws://localhost:8080/ws");
+        var socket = new WebSocket("ws://192.168.1.54:8080/ws²");
 
-socket.onopen = function(event) {
-    console.log("WebSocket connected");
-};
+        socket.onopen = function(event) {
+            console.log("WebSocket connected");
+        };
 
-socket.onmessage = function(event) {
-    // Parsez les coordonnées x et y à partir du message reçu
-    var data = JSON.parse(event.data);
-    var x = data.x;
-    var y = data.y;
+        socket.onmessage = function(event) {
+            // Parsez les coordonnées x et y à partir du message reçu
+            var data;
+            try {
+                data = JSON.parse(event.data);
+            } catch (e) {
+                console.error("Invalid JSON: ", event.data);
+                return;
+            }
 
-    // Sélectionnez l'élément représentant le point
-    var pointElement = document.getElementById("point");
+            var x = data.x;
+            var y = data.y;
 
-    // Mettez à jour les styles CSS de l'élément pour déplacer le point
-    pointElement.style.left = x + "px" ;
-    pointElement.style.top = y + "px";
-    
-    var vecteurElement = document.getElementById("data");
-    vecteurElement.innerHTML = "[ x :" + x  + ", y : " + y +"]";
-};
+            if (typeof x === 'undefined' || typeof y === 'undefined') {
+                console.error("Invalid data format: ", data);
+                return;
+            }
 
-socket.onclose = function(event) {
-    console.log("WebSocket closed");
-};
+            // Sélectionnez l'élément représentant le point
+            var pointElement = document.getElementById("point");
 
-socket.onerror = function(event) {
-    console.error("WebSocket error: " + event.data);
-};
+            // Mettez à jour les styles CSS de l'élément pour déplacer le point
+            pointElement.style.left = x + "px";
+            pointElement.style.top = y + "px";
 
+            // Mettre à jour l'affichage des coordonnées
+            var vecteurElement = document.getElementById("data");
+            vecteurElement.innerHTML = "[ x: " + x + ", y: " + y + " ]";
+        };
 
+        socket.onclose = function(event) {
+            console.log("WebSocket closed");
+        };
+
+        socket.onerror = function(event) {
+            console.error("WebSocket error: " + event.data);
+        };
     </script>
 </body>
 </html>
